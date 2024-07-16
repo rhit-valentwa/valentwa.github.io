@@ -38,13 +38,7 @@ a:hover {
   color: var(--contrast-color);
 }
 
-body#about img {
-  height: 15em;
-  display: inline;
-  margin-right: var(--horizontal-space);
-  border: 1px solid var(--heading-color);
-  box-shadow: 0px 0px 3px 0px rgb(0 0 0 / 74%);
-}
+
 
 @media screen and (min-width: 25em) {
   body#about img {
@@ -155,4 +149,43 @@ body#portfolio ul#portfolioItems {
 body#portfolio ul#portfolioItems li img {
   max-width: 100%;
   margin-left: -0.66em;
+}
+
+.portfolio-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  list-style-type: none;
+  padding: 0;
+}
+
+.portfolio-items li {
+  flex: 1 1 calc(50% - 20px); /* Adjusts to 50% width minus the gap */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.portfolio-items li img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.portfolio-items li h2 {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+.portfolio-items li p {
+  font-size: 1em;
+}
+
+/* Ensure responsive design for smaller screens */
+@media (max-width: 768px) {
+  .portfolio-items li {
+    flex: 1 1 100%;
+  }
 }

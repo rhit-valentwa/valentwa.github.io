@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SplitScreen</title>
+    <script src="./processing.js"></script>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var processing = new Processing(canvas, function(processing) {
+            processing.size(600, 600);
+            processing.background(0xFFF);
+
+            var mouseIsPressed = false;
+            processing.mousePressed = function () { mouseIsPressed = true; };
+            processing.mouseReleased = function () { mouseIsPressed = false; };
+
+            var keyIsPressed = false;
+            processing.keyPressed = function () { keyIsPressed = true; };
+            processing.keyReleased = function () { keyIsPressed = false; };
+
+            function getImage(s) {
+                var url = "https://www.kasandbox.org/programming-images/" + s + ".png";
+                processing.externals.sketch.imageCache.add(url);
+                return processing.loadImage(url);
+            }
+
+            // use degrees rather than radians in rotate function
+            var rotateFn = processing.rotate;
+            processing.rotate = function (angle) {
+                rotateFn(processing.radians(angle));
+            };
+
+            with (processing) {
+                var game_map_base = createGraphics(400, 400, P2D);
+                var game_map_raised = createGraphics(400, 400, P2D);
+
+                var redFOV = createGraphics(620, 420, P2D);
+                var blueFOV = createGraphics(620, 420, P2D);
+
+                game_map_raised.noStroke();
+
+                redFOV.background(255, 0);
+                blueFOV.background(255, 0);
+
+                var plr1 = {x:50, y:200, c:0};
+                var plr2 = {x:570, y:200, c:0};
+
+                var coins = [];
+
+                var Tree = function(ctx, x, y){
+                ctx.fill(163, 109, 0);
+                ctx.rect(x,y,20,97); 
+                ctx.fill(0, 212, 92);
+                ctx.rect(x - 40 ,y - 90,100,100); 
+                };
+
+                var update = function(){
+                    game_map_raised.background(0, 189, 82);
+                    
+                    Tree(game_map_raised, 202,233);
+                    Tree(game_map_raised, 319,40);
+                    Tree(game_map_raised, 456,-39);
+                    Tree(game_map_raised, 474,200);
+                    Tree(game_map_raised, 116,88);
+                    
+                    game_map_raised.fill(252, 252, 252);
+                    game_map_raised.rect(plr1.x  + 150, plr1.y + 100, 20, 20, 6);
+                    game_map_raised.rect(plr2.x - 210, plr2.y + 100, 20, 20, 6);
+                    
+                    image(game_map_raised.get(plr1.x-40, plr1.y, 400, 200), 0, -5);
+                    image(redFOV.get(plr1.x-40, plr1.y, 400, 200), 0, 0);
+                    image(game_map_raised.get(plr2.x - 400, plr2.y , 400, 200), 0, 200); 
+                    image(blueFOV.get(plr2.x -  400, plr2.y , 400, 200), 0, 200); 
+                };
+
+                var down_keys = {};
+
+                update();
+                    
+                var draw = function() {
+                    background(0, 0, 0);
+                    
+                    game_map_raised.noStroke();
+                    
+                    if(down_keys[87]){    
+                        plr1.y -=5; 
+                    }
+                    if(down_keys[83]){
+                        plr1.y +=5;
+                    }
+                    if(down_keys[65]){
+                        plr1.x -=5; 
+                    }
+                    if(down_keys[68]){
+                            plr1.x +=5; 
+                        }
+                    if(down_keys[UP]){    plr2.y -=5; }
+                    if(down_keys[DOWN]){  plr2.y +=5; }
+                    if(down_keys[LEFT]){  plr2.x -=5; }
+                    if(down_keys[RIGHT]){ plr2.x +=5; }
+                    
+                    update();
+                };
+
+                keyPressed = function(){
+                    down_keys[keyCode] = true;
+                };
+
+                keyReleased = function () {
+                down_keys[keyCode] = false;
+                };
+            }
+            if (typeof draw !== 'undefined') processing.draw = draw;
+        });
+    </script>
+</body>
+</html>

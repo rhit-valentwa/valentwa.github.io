@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The RPG</title>
+  <script src="./processing.js"></script>
+</head>
+<body>
+   
+   
+  <canvas id="canvas"></canvas>
+  
+  <script>
+    var canvas = document.getElementById("canvas");
+    var processing = new Processing(canvas, function(processing) {
+        processing.size(400, 400);
+        processing.background(0xFFF);
+
+        var mouseIsPressed = false;
+        processing.mousePressed = function () { mouseIsPressed = true; };
+        processing.mouseReleased = function () { mouseIsPressed = false; };
+
+        var keyIsPressed = false;
+        processing.keyPressed = function () { keyIsPressed = true; };
+        processing.keyReleased = function () { keyIsPressed = false; };
+
+        function getImage(s) {
+            var url = "https://www.kasandbox.org/programming-images/" + s + ".png";
+            processing.externals.sketch.imageCache.add(url);
+            return processing.loadImage(url);
+        }
+
+        // use degrees rather than radians in rotate function
+        var rotateFn = processing.rotate;
+        processing.rotate = function (angle) {
+            rotateFn(processing.radians(angle));
+        };
+
+        with (processing) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Player Variables
+{
+var Class = "Mage";
+var level = 1;
+var gender = "Boy";
+var turnside = "back";
+var walking = false;
+var i = 0;
+var walkingY = [256,254,252,254,256,258,256,254];
+var walking1Y = [252,254,256,258,256,254,252,250];
+var name = "";
+var move1 = "hello";
+var move2 = "hello";
+var move3 = "hello";
+var move4 = "hello";
+var player_speed = 5;
+var player_move = 0;
+var player_health = 100;
+var player_exp = 0;
+var player_death = false;
+}
+
+// Combat Variables
+{
+var notice = "Nothing has happened...";
+var enemy_health = [120,120,120,120,100,100,100,100,100];
+var timer = 0;
+var combat_timer = 0;
+var dead = [false,false,false,false];
+var Enemy = "";
+}
+
+// Graphics Variables
+{
+    
+noStroke();
+var graphics_X = -200;
+var graphics_Y = -200;
+var graphics_X2 = 0;
+var graphics_Y2 = 0;
+var graphics_X3 = 0;
+var graphics_Y3 = 0;
+var graphics_X4 = 0;
+var graphics_Y4 = 0;
+var Time = 0;
+frameRate(60);
+var showBox = false;
+var collison = false;
+var pP = {
+    x: 0,
+    y: 0,
+};
+var p = {
+    x: 155,
+    y: 138,
+    w: 25,
+    h: 76,
+};
+var pCol = [];
+var colCount = 0;
+var keyString = "";
+var keySplit = [];
+var x2 = 0;
+var y2 = 0;
+
+}
+
+// Menu Variables
+{
+  
+  var page = "Menu";  
+  var n = 0;
+  var zOff = 0;
+}
+
+// Questing Variables
+{
+    var Active_Quest = "Learn How To Play";
+    var Completed_Quest = "Run The Game";
+    var stage = "Stage1";
+    var person = "";
+    var timer = 0;
+}
+
+// Major System
+
+var Button = function(fu,x,y,w,h,value,txt,txtSize){
+         
+            fill(94, 94, 94);
+            if(mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h){
+            fill(181, 181, 181);    
+            if(mouseIsPressed){
+            if(fu === "Page"){
+            page = value;
+            }
+            if(fu === "Combat"){
+            player_move = value;
+            }
+            if(fu === "Talking"){
+            stage = value;
+            }
+            if(fu === "Gender"){
+            gender = value;
+            page = "Setup";
+            }
+            if(fu === "Class"){
+            page = "Name_Choose";
+            Class = value;
+            }
+            if(fu === "Name"){
+            page = "Game";
+            name = value;
+            }
+            
+            }
+            mouseClicked = function(){
+            if(fu === "Combat"){
+            player_move = value;
+            }
+            };
+    }
+            
+      rect(x,y,w,h);
+      textAlign(CENTER,CENTER);
+      textSize(txtSize);
+      fill(0, 0, 0);
+      text(txt,x +w / 2,y + h / 2);
+      
+};
+
+//Player System
+
+var Player = function(x,y){
+    this.x = x;
+    this.y = y;
+};
+
+Player.prototype.draw = function() {
+     fill(255, 255, 255);
+     if(Class === "Mage" && gender === "Boy"){
+         pushMatrix();
+           scale(0.8);
+         if(turnside === "left"){
+            
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+fill(0, 0, 255);
+rect(208,walkingY[i] - 16,6,20);
+rect(206,walking1Y[i] - 8,6,20);
+fill(0, 0, 255);
+rect(203,200,13,50);
+fill(255, 217, 161);
+rect(206,218,6,25);
+ellipse(209,200,20,30);
+         }
+         if(turnside === "right"){
+       
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+fill(0, 0, 255);
+rect(208,walkingY[i] - 16,6,20);
+rect(206,walking1Y[i] - 8,6,20);
+fill(0, 0, 255);
+rect(203,200,13,50);
+fill(255, 217, 161);
+rect(206,218,6,8);
+ellipse(210,200,15,30);
+fill(163,76,0);
+rect(206,197,6,67);
+         }
+         if(turnside === "back"){
+
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+fill(0,0,255);
+rect(214,walkingY[i] - 8,6,20);
+rect(200,walking1Y[i] - 8,6,20);
+fill(0, 0, 255);
+rect(200,200,20,50);
+fill(44, 44, 125);
+rect(200,200,6,50);
+rect(214,200,6,49);
+fill(255, 217, 161);
+rect(195,214,5,25);
+rect(220,214,11,7);
+fill(163, 76, 0);
+rect(230,200,7,70);
+fill(255, 217, 161);
+ellipse(210,200,25,30);
+
+
+fill(255, 255, 255);
+
+
+         }
+         if(turnside === "front"){
+             
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+          
+        
+fill(0,0,255);
+rect(214,walkingY[i] - 8,6,20);
+rect(200,walking1Y[i] - 8,6,20);
+fill(0, 0, 255);
+rect(200,200,20,50);
+fill(44, 44, 125);
+rect(200,200,6,50);
+rect(214,200,6,49);
+fill(255, 217, 161);
+rect(195,214,5,25);
+rect(220,214,11,7);
+fill(163, 76, 0);
+rect(230,200,7,70);
+fill(255, 217, 161);
+ellipse(210,200,25,30);
+fill(255, 255, 255);
+rect(201,196,6,3);
+rect(212,196,6,3);
+fill(0, 4, 255);
+rect(204,196,3,3);
+rect(212,196,3,3);
+fill(255, 0, 0);
+rect(203,204,13,1);
+fill(255, 255, 255);
+
+         }
+         popMatrix();
+     }
+     pushMatrix();
+     translate(-43,-48);
+     if(Class === "Rouge" && gender === "Boy"){
+        
+         if(turnside === "left"){
+          
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+
+    rect(208,walkingY[i] - 16,6,20);
+    rect(206,walking1Y[i] - 8,6,20);
+
+   
+    rect(203,200,13,50);
+    
+    rect(207,218,5,25);
+    ellipse(210,200,18,30);
+     fill(255, 0, 0);
+     rect(207,213,5,25);
+     rect(207,250,5,18);
+         }
+         if(turnside === "right"){
+           
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+
+    rect(208,walkingY[i] - 16,6,20);
+    rect(206,walking1Y[i] - 8,6,20);
+   
+    rect(203,200,13,50);
+    
+    rect(207,218,5,25);
+    ellipse(210,200,18,30);
+     fill(255, 0, 0);
+     rect(207,213,5,25);
+     rect(207,250,5,18); 
+         }
+         if(turnside === "back"){
+          
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+
+fill(0, 0, 0);
+rect(214,walkingY[i] - 8,6,20);
+rect(200,walking1Y[i] - 8,6,20);
+rect(200,200,20,50);
+rect(195,214,5,25);
+rect(220,214,5,25);
+ellipse(210,200,25,30);
+pushMatrix();
+
+rotate(10);
+fill(176, 176, 176);
+rect(243,177,5,28);
+fill(255, 0, 0);
+rect(242,173,7,6);
+rect(239,177,13,6);
+popMatrix();
+         }
+         if(turnside === "front"){
+           
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+
+fill(0, 0, 0);
+rect(214,walkingY[i] - 8,6,20);
+rect(200,walking1Y[i] - 8,6,20);
+fill(0, 0, 0);
+rect(200,200,20,50);
+fill(0, 0, 0);
+rect(195,214,5,25);
+rect(220,214,5,25);
+fill(0, 0, 0);
+ellipse(210,200,25,30);
+fill(255, 196, 0);
+rect(201,196,17,5);
+fill(255, 255, 255);
+rect(201,196,6,3);
+rect(212,196,6,3);
+fill(0, 30, 255);
+rect(202,196,3,3);
+rect(212,196,3,3);
+fill(112, 112, 112);
+rect(204,204,13,1);
+fill(255, 0, 0);
+rect(196,215,5,19);
+rect(219,215,5,19);
+rect(214,250,5,14);
+rect(201,250,5,14);  
+         }
+     }
+     popMatrix();
+     if(Class === "Spellsword" && gender === "Boy"){
+         
+         pushMatrix();
+         
+         translate(-42,-51);
+         
+         if(turnside === "left"){
+             
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+fill(0, 0, 0);
+rect(210,walkingY[i] - 8,6,20);
+rect(208,walking1Y[i] - 8,6,20);
+fill(125, 125, 125);
+rect(203,200,15,71);
+fill(56, 56, 56);
+rect(207,200,6,50);
+fill(148, 92, 13);
+rect(207,214,6,25);
+ellipse(210,200,25,30);
+
+         }
+         if(turnside === "right"){
+             
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+
+fill(0, 0, 0);
+rect(210,walkingY[i] - 8,6,20);
+rect(208,walking1Y[i] - 8,6,20);
+fill(125, 125, 125);
+rect(203,200,15,71);
+fill(56, 56, 56);
+rect(207,200,6,50);
+fill(148, 92, 13);
+rect(207,222,5,14);
+fill(115, 124, 255,100);
+rect(206,220,7,31);
+rect(206,220,7,6);
+rect(206,238,7,6);
+rect(206,230,7,6);
+fill(148, 92, 13);
+ellipse(210,200,25,30);
+
+         }
+         if(turnside === "back"){
+             
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+         
+fill(0, 0, 0);
+rect(214,walkingY[i] - 8,6,20);
+rect(200,walking1Y[i] - 8,6,20);
+fill(125, 125, 125);
+rect(200,200,20,71);
+fill(56, 56, 56);
+rect(200,200,6,50);
+rect(214,200,6,49);
+fill(148, 92, 13);
+rect(195,214,5,25);
+rect(220,214,11,7);
+fill(115, 124, 255,100);
+rect(230,205,7,31);
+rect(237,218,7,6);
+rect(237,230,7,6);
+rect(237,205,7,6);
+fill(148, 92, 13);
+ellipse(210,200,25,30);
+
+
+fill(255, 255, 255);
+
+
+         }
+         if(turnside === "front"){
+         
+if(walking){i++;if(i >= 7){i = 0;}}
+
+if(walking === false){fill(0,0,255);rect(203,248,6,20);rect(207,250,6,20);}
+         
+fill(0, 0, 0);
+rect(214,walkingY[i] - 8,6,20);
+rect(200,walking1Y[i] - 8,6,20);
+fill(125, 125, 125);
+rect(200,200,20,71);
+fill(56, 56, 56);
+rect(200,200,6,50);
+rect(214,200,6,49);
+fill(148, 92, 13);
+rect(195,214,5,25);
+rect(220,214,11,7);
+fill(115, 124, 255,100);
+rect(230,205,7,31);
+rect(237,218,7,6);
+rect(237,230,7,6);
+rect(237,205,7,6);
+fill(148, 92, 13);
+ellipse(210,200,25,30);    
+fill(255, 255, 255);
+rect(201,194,6,6);
+rect(213,194,6,6);
+fill(56, 56, 56);
+rect(204,196,3,3);
+rect(213,196,3,3);
+fill(56, 56, 56);
+rect(205,204,11,3);
+
+         
+         }
+    
+    
+     }
+     popMatrix();
+     
+     pushMatrix();
+     translate(-44,-44);
+     if(Class === "Warrior" && gender === "Boy"){
+         
+         if(turnside === "left"){
+               if(walking){i++;if(i >= 7){i = 0;}}
+     fill(130, 130, 130);
+if(!walking){
+    rect(206,250,7,20);
+    rect(205,250,7,20);
+}
+if(walking){
+    rect(208,walkingY[i] - 16,6,20);
+    rect(206,walking1Y[i] - 8,6,20);
+}   
+fill(0, 0, 0);
+    rect(203,200,13,61);
+    rect(207,218,5,25);
+    fill(128, 77, 0);
+    ellipse(210,200,15,30);
+fill(163, 101, 0);
+rect(207,198,4,28);
+fill(99, 99, 99);
+rect(202,198,6,6);
+rect(200,203,8,6);
+         }
+         if(turnside === "right"){
+                     if(walking){i++;if(i >= 7){i = 0;}}
+     fill(130, 130, 130);
+if(!walking){
+    rect(206,250,7,20);
+    rect(205,250,7,20);
+}
+if(walking){
+    rect(208,walkingY[i] - 16,6,20);
+    rect(206,walking1Y[i] - 8,6,20);
+}   
+fill(0, 0, 0);
+    rect(203,200,13,61);
+    rect(207,218,5,25);
+    fill(128, 77, 0);
+    ellipse(210,200,15,30);
+fill(163, 101, 0);
+rect(207,198,4,28);
+fill(99, 99, 99);
+rect(210,198,6,6);
+rect(209,203,8,6);
+         }
+         if(turnside === "back"){
+                   
+    if(walking){i++;if(i >= 7){i = 0;}}
+    
+ 
+    
+if(!walking){
+    fill(163, 163, 163);
+    rect(214,250,6,20);
+    rect(200,250,6,20);
+}
+if(walking){
+    fill(163,163,163);
+    rect(214,walkingY[i] - 8,6,20);
+    rect(200,walking1Y[i] - 8,6,20);
+}
+fill(0, 0, 0);
+rect(200,200,20,61);
+fill(110, 62, 0);
+rect(220,214,9,9);
+fill(163, 101, 0);
+rect(188,198,4,28);
+rect(229,198,4,28);
+fill(99, 99, 99);
+rect(182,198,6,6);
+rect(233,198,6,6);
+rect(180,203,8,6);
+rect(233,203,8,6);
+fill(128, 77, 0);
+ellipse(210,200,25,30);
+rect(191,214,9,9);
+
+
+
+         }
+         if(turnside === "front"){
+                if(walking){i++;if(i >= 7){i = 0;}}
+    
+if(!walking){
+    fill(163, 163, 163);
+    rect(214,250,6,20);
+    rect(200,250,6,20);
+}
+if(walking){
+    fill(163,163,163);
+    rect(214,walkingY[i] - 8,6,20);
+    rect(200,walking1Y[i] - 8,6,20);
+}
+fill(0, 0, 0);
+rect(200,200,20,61);
+fill(110, 62, 0);
+rect(191,214,9,9);
+rect(220,214,9,9);
+fill(163, 101, 0);
+rect(188,198,4,28);
+rect(229,198,4,28);
+fill(99, 99, 99);
+rect(182,198,6,6);
+rect(233,198,6,6);
+rect(180,203,8,6);
+rect(233,203,8,6);
+fill(128, 77, 0);
+ellipse(210,200,25,30);
+fill(255, 255, 255);
+rect(201,196,6,3);
+rect(212,196,6,3);
+fill(0, 255, 64);
+rect(203,196,3,3);
+rect(212,196,3,3);
+fill(255, 0, 0);
+rect(207,204,9,3);
+         }
+         
+     }
+   popMatrix();
+     if(Class === "Mage" && gender === "Girl"){
+         
+         if(turnside === "left"){
+             
+         }
+         if(turnside === "right"){
+             
+         }
+         if(turnside === "back"){
+             
+         }
+         if(turnside === "front"){
+             
+         }
+     }
+     if(Class === "Rouge" && gender === "Girl"){
+         
+         if(turnside === "left"){
+             
+         }
+         if(turnside === "right"){
+             
+         }
+         if(turnside === "back"){
+             
+         }
+         if(turnside === "front"){
+             
+         }
+     } 
+     if(Class === "Spellsword" && gender === "Girl"){   
+        if(turnside === "left"){
+            
+        }
+        if(turnside === "right"){
+            
+        }
+        if(turnside === "back"){
+            
+        }
+        if(turnside === "front"){
+            
+        }
+        
+     }
+     if(Class === "Warrior" && gender === "Girl"){
+       
+        if(turnside === "left"){
+            
+        }
+        if(turnside === "right"){
+            
+        }
+        if(turnside === "back"){
+            
+        }
+        if(turnside === "front"){
+            
+        }
+     }
+
+
+};
+
+var player = new Player(200,200);
+
+// Combat Assets
+
+var LevelUp = function(){
+    if(player_exp >= 20){
+        level = 2;
+        player_health = 120;
+    }
+    if(player_exp >= 40){
+       level = 3; 
+       player_health = 130;
+    }
+    if(player_exp >= 80){
+       level = 4; 
+       player_health = 140;
+    }
+    if(player_exp >= 160){
+       level = 5; 
+       player_health = 150;
+    }
+    if(player_exp >= 320){
+       level = 6;
+       player_health = 170;
+    }
+    if(player_exp >= 640){
+       level = 7;
+       player_health = 180;
+    }
+    if(player_exp >= 1280){
+       level = 8;
+       player_health = 190;
+    }
+    if(player_exp >= 2560){
+       level = 9;
+       player_health = 200;
+    }
+    if(player_exp >= 5120){
+       level = 10;
+       player_health = 160;
+    }
+};
+
+// Combat System
+
+var combat = function(eName,eHealth,eLevel,eDamage,Exp,eDead){
+     if(!dead[eDead]){
+      if(Class === "Mage"){
+        move1 = "curse"; 
+        move2 = "brace"; 
+        move3 = "ward"; 
+        move4 = "Curse";}
+      if(Class === "Rouge"){ 
+        move1 = "stab"; 
+        move2 = "poison"; 
+        move3 = "dash"; 
+        move4 = "hurdel";}
+      if(Class === "Warrior"){ 
+        move1 = "hack";
+        move2 = "slash";
+        move3 = "wound";
+        move4 = "dagger";}
+      if(Class === "Spellsword"){ 
+        move1 = "spell dagger";
+        move2 = "rune";
+        move3 = "ward";
+        move4 = "Curse";}
+        
+    if(player_move === 1){
+    
+        
+        if(Class === "Mage"){notice = "You cursed the enemy..;";}
+        if(Class === "Warrior"){notice = "";}
+        if(Class === "Rouge"){notice = "";}
+        if(Class === "Spellsword"){notice = "";}
+        
+        if(Class === "Mage"){  player_health += 50;}
+        if(Class === "Warrior"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Rouge"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Spellsword"){  enemy_health[eHealth] -= 20;}
+        player_move = 10;
+    }
+    if(player_move === 2){
+      
+        player_move = 10;
+        if(Class === "Mage"){notice = "You braced...it did nothing...";}
+        if(Class === "Warrior"){notice = "You punched but he bit back !";}
+        if(Class === "Rouge"){notice = "You punched but he bit back !";}
+        if(Class === "Spellsword"){notice = "You punched but he bit back !";}
+        
+        if(Class === "Mage"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Warrior"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Rouge"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Spellsword"){  enemy_health[eHealth] -= 20;}
+    }
+    if(player_move === 3){
+        
+        player_move = 10;
+        if(Class === "Mage"){notice = "You punched but he bit back !";}
+        if(Class === "Warrior"){notice = "You punched but he bit back !";}
+        if(Class === "Rouge"){notice = "You punched but he bit back !";}
+        if(Class === "Spellsword"){notice = "You punched but he bit back !";}
+        
+        if(Class === "Mage"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Warrior"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Rouge"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Spellsword"){  enemy_health[eHealth] -= 20;}
+    }
+    if(player_move === 4){
+        
+        player_move = 10;
+        if(Class === "Mage"){notice = "You punched but he bit back !";}
+        if(Class === "Warrior"){notice = "You punched but he bit back !";}
+        if(Class === "Rouge"){notice = "You punched but he bit back !";}
+        if(Class === "Spellsword"){notice = "You punched but he bit back !";}
+        
+        if(Class === "Mage"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Warrior"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Rouge"){  enemy_health[eHealth] -= 20;}
+        if(Class === "Spellsword"){  enemy_health[eHealth] -= 20;}
+    }
+    if(player_move === 10 ){
+        player_health -= eDamage;
+        player_move = 0;
+        
+    }
+    if(enemy_health[eHealth] <= 0){
+       dead[eDead] = true;
+       timer++;
+       player_health = 100;
+       player_exp += Exp;
+       
+       
+    }
+    if(player_health <= 0){
+        notice = "You lost ? How can you do that ?";
+        player_death = true;    
+    }
+    if(dead[eDead] === false){
+    background(0, 0, 0);
+
+    Button("Combat",86,173,100,50,1,move1,20,eDead);
+    Button("Combat", 207,173,100,50,2,move2,20,eDead);
+    Button("Combat", 87,286,100,50,3,move3,20,eDead);
+    Button("Combat", 209,286,100,50,4,move4,20,eDead);
+    
+    fill(255, 255, 255);
+    
+    text(notice,191,108);
+    text(eName,359,32);
+    text(name,38,33);
+    text(player_health + " HP",114,33);
+    text(enemy_health[eHealth] + " HP",302,33);
+    text("Level: " + eLevel,310,12);
+    text("Level: " + level,43,12);
+
+    }
+     if (player_death === true){
+        page = "Menu";
+    }
+    if(dead[eDead] === true){
+        page = "Game";
+        notice = "Nothing has happened...";
+    }
+     }
+      if (player_death === true){
+        page = "Menu";
+    }
+    if(dead[eDead] === true){
+        page = "Game";
+        notice = "Nothing has happened...";
+    }
+};
+
+// Collison Systems
+
+var drawChar = function() {
+ fill(0,0,0,0);
+ 
+ 
+ 
+     rect(p.x, p.y, p.w , p.h );
+ 
+};
+
+var colBox = function(fu,x, y, w, h,value,value2) {
+  
+    if(showBox) {
+        fill(0, 0, 0);
+        rect(x, y, w, h);
+    }
+   
+    
+    x2 = pCol[colCount * 2];
+    y2 = pCol[colCount * 2 + 1];
+    
+    //collision
+    if(p.y + p.h > y && p.y < y + h  && p.x < x + w && p.x + p.w > x ) {
+        if(fu === "Combat"){
+         page = "Combat";
+         Enemy = value;
+        }
+        if(fu === "Talking"){
+        if(keyCode === "e") {
+        page = "Talking";
+        person = value;
+        }  
+        }
+        if(fu === "Door"){page = value;}
+        
+        if(fu === "Wall"){
+        if(pP.x <= p.h + x2) {
+        //left
+        graphics_X+=10;
+        }
+        if(p.h + pP.x >=  x2) {
+        
+        
+        }
+        if(pP.y + p.h >= y2) {
+        //bottom
+        graphics_Y-=10;
+        }
+        if(pP.y <= p.w +  y2) {
+        //top
+        graphics_Y+=10;
+        }
+        }
+    }
+    pCol[colCount * 2] = x;
+    pCol[colCount * 2 + 1] = y;
+    colCount ++;
+};
+
+var colBoxR = function(x, y, w, h) {
+    if(showBox) {
+        fill(0, 0, 0);
+        rect(x, y, w, h);
+    }
+   
+    
+    x2 = pCol[colCount * 2];
+    y2 = pCol[colCount * 2 + 1];
+    
+    //collision
+    if(p.y + p.h > y && p.y < y + h  && p.x < x + w && p.x + p.w > x ) {
+        
+        if(pP.x <= p.h + x2) {
+        graphics_X -= 10;
+        
+        }
+        if(p.h + pP.x >=  x2) {
+       
+        
+        }
+        if(pP.y <= p.w + y2) {
+        
+        }
+        if(p.w + pP.y >=  y2) {
+        
+        }
+    }
+    pCol[colCount * 2] = x;
+    pCol[colCount * 2 + 1] = y;
+    colCount ++;
+};
+
+// G. U. I.
+
+var Update = function(txt){
+    
+    if(timer <= 150){
+        
+        timer++;
+        
+        
+        fill(79, 77, 77);
+        rect(100,100,200,200);
+        fill(255, 0, 0);
+        textSize(20);
+        text("Daily Update:",200,120);
+        text(txt,200,170);
+        
+        
+    }
+    
+};
+
+var GUI = function(){
+    
+    fill(0, 0, 0);
+    ellipse(30,369,100,100);
+    ellipse(363,369,100,100);
+    fill(0, 0, 0);
+    rect(62,319,260,83);
+    Button("Page",3,338,50,50,"Menu","Restart",13);
+    Button("Page",332,338,58,30,"Coming Soon","Coming Soon",8);
+    Button("Page",332,373,58,30,"Map","Map",8);
+    textSize(13);
+    fill(8, 247, 12);
+    text("Location:  " + page,121,327);
+    fill(255, 0, 0);
+    text("Level: " + level,202,328);
+    fill(230, 255, 0);
+    text("Active Quest: "+ Active_Quest,169,355);
+    fill(255, 0, 251);
+    text("Completed Quest: " + Completed_Quest,171,379);
+    fill(0, 179, 255);
+    text("Gender: " + gender,272,329);
+    
+};
+
+var mp = function(){
+           pushMatrix();
+           background(222, 233, 255);
+           fill(31, 194, 64);
+           beginShape();
+           translate(-19,77);
+           scale(0.7);
+           vertex(70,29);
+           vertex(49,74);
+           vertex(77,102);
+           vertex(77,150);
+           vertex(50,150);
+           vertex(41,236);
+           vertex(69,256);
+           vertex(69,291);
+           vertex(103,329);
+           vertex(126,308);
+           vertex(148,336);
+           vertex(148,362);
+           vertex(163,389);
+           vertex(251,389);
+           vertex(267,365);
+           vertex(300,365);
+           vertex(314,388);
+           vertex(332,388);
+           vertex(342,399);
+           vertex(370,399);
+           vertex(389,373);
+           vertex(389,322);
+           vertex(410,322);
+           vertex(418,302);
+           vertex(418,285);
+           vertex(406,270);
+           vertex(406,249);
+           vertex(420,249);
+           vertex(430,232);
+           vertex(430,213);
+           vertex(412,192);
+           vertex(412,158);
+           vertex(428,144);
+           vertex(428,98);
+           vertex(394,98);
+           vertex(394,68);
+           vertex(410,52);
+           vertex(421,25);
+           vertex(421,8);
+           vertex(406,-6);
+           vertex(406,-21);
+           vertex(424,-36);
+           vertex(424,-50);
+           vertex(325,-79);
+           vertex(303,-78);
+           vertex(292,-95);
+           vertex(165,-95);
+           vertex(152,-73);
+           vertex(126,-73);
+           vertex(112,-45);
+           vertex(77,-45);
+           vertex(44,-64);
+           vertex(54,-22);
+           vertex(74,-4);
+           vertex(71,29);
+           endShape();
+           fill(120, 119, 119);
+           beginShape();
+           vertex(468,336);
+           vertex(468,378);
+           vertex(484,392);
+           vertex(484,422);
+           vertex(497,440);
+           vertex(524,440);
+           vertex(534,424);
+           vertex(551,424);
+           vertex(559,434);
+           vertex(571,434);
+           vertex(571,394);
+           vertex(552,381);
+           vertex(550,363);
+           vertex(566,354);
+           vertex(566,337);
+           vertex(553,337);
+           vertex(552,324);
+           vertex(536,324);
+           vertex(529,312);
+           vertex(522,312);
+           vertex(517,322);
+           vertex(503,322);
+           vertex(501,312);
+           vertex(486,312);
+           vertex(475,325);
+           vertex(470,325);
+           vertex(467,340);
+           endShape();
+           fill(0, 0, 0);
+           textSize(39);
+           text("Fondasia",227,100);
+           textSize(24);
+           text("The Island \n Of Lost Hope",501,284);
+           popMatrix();
+           fill(0, 255, 13);
+           rect(192,38,40,40);
+           rect(86,38,40,40);
+           rect(86,234,40,40);
+           rect(197,234,40,40);
+           rect(139,186,40,40);
+           fill(77, 60, 5);
+           rect(206,78,15,30);
+           rect(96,78,15,30);
+           rect(96,274,15,30);
+           rect(211,274,15,30);
+           rect(152,226,15,30);
+           Button("Page",146,100,30,30,"Game","Test",14);
+           Button("Page",321,313,30,30,"Lost Hope","Test",14);
+           Button("Page",205,313,30,30,"Cape Point","Test",14);
+};
+
+// Talking/Quests Systems
+
+var test = function(stage){
+    if(stage === "Stage1"){
+    fill(28, 15, 28);
+    textSize(20);
+    text("Go Kill John",187,100);
+    Button("Talking",71,189,100,100,"Stage2","Ok",20);
+    Button("Talking",200,189,100,100,"Stage3","No",20);
+    }
+    if(stage === "Stage2"){
+    fill(3, 2, 3);
+    text("Here is the info",178,100); 
+    Button("Talking",71,189,100,100,"Stage4","Got it",20);
+    Button("Talking",200,189,100,100,"Stage2","I have changed my mind",20);
+    
+    }
+    if(stage === "Stage3"){
+     fill(3, 2, 3);
+     text("Are you sure...",188,100);    
+     Button("Talking",71,189,100,100,"Stage2","I have changed my mind",20);
+     Button("Talking",200,189,100,100,"Stage5","I am done here...",14);
+    }
+    if(stage === "Stage4"){
+      Active_Quest = "Kill John";
+      page = "Game";
+    }
+    if(stage === "Stage5"){
+      Active_Quest = "Delete Game Or Kill Yourself...";
+      page = "Game";
+    }
+    
+};
+
+// Intro Scene Assets
+
+var smoke = function(){
+    background(0, 0, 0);
+   var xOff = 0.0;
+for (var x = 0; x < 50; x++) {
+    var yOff = 0.0;
+    for (var y = 0; y < 50; y++) {
+        var bright = map(noise(xOff , yOff ,zOff), 0, 1, 0, 255);
+       
+        fill(bright -45);
+        
+        rect(x * 10, y * 10,10,10);
+        yOff += 0.1;
+    }
+    xOff += 0.1;
+} 
+zOff+=0.01;
+};
+
+// Intro Scenes
+
+var Menu = function(){
+
+        smoke();
+        Button("Page",97,82,198,87,"Storyline","Start",20);
+        Button("Page",97,185,198,87,"Coming Soon","Save",20);
+        Button("Page",97,289,198,87,"Coming Soon","Use Save",20);
+        textSize(31);
+        fill(0, 0, 0);
+        text("Hero Of Fondaisa",193,48);
+        fill(133, 166, 255);
+        text("Hero Of Fondaisa",196,48);
+       
+};
+
+var Storyline = function(){
+    smoke();
+    textSize(11);
+    fill(255, 255, 255);
+text(" Long ago... Before Fondasia was created, the gods of old \n had an epic struggle against one another. Yoljif was  the \n leader of the gods but his throne was at stake. Saather \n the god of shadows  was the challenger, and he  numerous\ngods comitted to his cause. After eons  of conflict, Yoljif and \n the gods pledged to his cause arose victorious. The gods \n committed to saather  submitted to the  king, and Saather was \n sentenced to  an eternity of banishment  to the underworld. \n In his  last  attempt to cause chaos Saather uttered a terrible curse \n",193,144);
+
+text("There will be a bringer of destruction sent by me.  They will oppose \n everything that is true and good  and they shall be the  sign that I will \n return. In an effort to counter this curse, Yoljif used his might to issue \n another  solution. This fiend  will not be unopposed; a mighty hero shall \n arise. This hero will either be the savior, or an  accomplice to Saather \n even greater than the bringer of destruction.   After this was decreed, \nYoljif was depleted of his powers and his life force turned into our world \n and all of us people were created. Saather  was banished and all seemed\n right… Centuries passed and fact became regarded as legend, then myth.\n This story was  only acknowledged by a select few.But then  trouble  \nstarting brewing on the  horizon and people turned to answers. Could this \n be signs of the bringer of destruction? Who will be  the unnamed hero? ",
+193,275);
+    Button("Page",160,350,50,25,"Setup_Intro","Continue",10);
+};
+
+var Setup_Intro = function(){
+    smoke();
+    fill(255, 255, 255);
+    textSize(10);
+    
+fill(13, 0, 255);
+text(" THE MAGE- The mage is a master\n of magic!  He uses spells to deal \n damage or heal himself! His special \n attack is a  Lightning bolt  that does \n massive  amounts of damage!",292,144);
+
+fill(230, 0, 255);
+text("The SPELLSWORD-The spell sword is the \n perfect combination between blade and \n spells. He uses his skills \n to wield a  sword and a destruction \n spell. His ultimate ability is a quick strike that \n does both magic and physical damage. ",103,127);
+
+fill(255, 0, 0);
+text("The Warrior- The warrior\n  is a mighty beast of a \nman, a master of strength. \nHe uses a battle axe  that does \n mass amounts of physical damage\n and a shield to protect himself. \nHis special  is he can fortify \n his armor  to take very little \n damage for a short time. ",81,228);
+
+fill(0, 0, 0);
+text("THE ROUGH-The rogue is a master of stealth! \n He uses two daggers for a swift attack doing \n double damage, and a siphon ability that drains \n his opponent’s health. His special is fortify stealth. \n It decreases his chance to be hit for a short time.",281,222);
+        Button("Page",143,301,100,50,"Gender_Choose","Next",20);
+        
+    
+};
+
+var Gender_Choose = function(){
+        smoke();
+        Button("Gender",90,110,100,100,"Boy","Boy",20);
+        Button("Gender",210,110,100,100,"Girl","Girl",20);
+};
+
+var Class_Choose = function(){
+     smoke();
+        Button("Class",69,100,100,100,"Mage","Mage",20);
+        Button("Class",232,252,100,100,"Warrior","Warrior",20);
+        Button("Class",231,100,100,100,"Rouge","Rouge",20);
+        Button("Class",69,251,100,100,"Spellsword","Spellsword",20);
+};
+
+var Name_Choose = function(){
+    smoke();
+       if(gender === "Girl"){
+            Button("Name",10,9,100,100,"Mary","Mary",20); 
+            Button("Name",286,9,100,100,"Ash","Ash",20); 
+            Button("Name",10,285,100,100,"Jane","Jane",20); 
+            Button("Name",289,288,100,100,"Sue","Sue",20); 
+       }
+       if(gender === "Boy"){
+           Button("Name",10,9,100,100,"Larry","Larry",20); 
+           Button("Name",289,9,100,100,"John","John",20); 
+           Button("Name",10,285,100,100,"Ted","Ted",20); 
+           Button("Name",289,288,100,100,"Frank","Frank",20); 
+       }
+};
+ 
+// Graphics
+
+var Tree1 = function(x,y){
+      
+    stroke(0, 0, 0);
+    fill(143, 94, 16);
+    rect(x + 148,y + 194,47,113);
+    
+    var R = function(x,y){
+       rect(x + 100,y + 87,49,46);
+     };
+     
+    fill(7, 227, 44);
+    R(x + 76,y + 96);
+    fill(84, 255, 113);
+    R(x + 92,y + 69);
+    fill(6, 207, 40);
+    R(x + 39,y + 63);
+    fill(50, 227, 79);
+    R(x + 74,y + 48);
+    fill(64, 255, 96);
+    R(x + 58,y + 26);
+    fill(56, 207, 81);
+    R(x + 23,y + 41);
+    fill(52, 186, 72);
+    R(x + 1,y + 76);
+    fill(45, 181, 68);
+    R(x + 17,y + 28);
+    fill(33, 222, 65);
+    R(x + 22,y + 90);
+
+noStroke();
+};
+
+var Mini_Forest = function(x,y){
+    
+    Tree1(x + 100,y + 0);
+    Tree1(x + 200,y + 0);
+    Tree1(x + 100,y + 100);
+    Tree1(x + 200,y + 100);
+    Tree1(x + 100,y + 200);
+    Tree1(x + 200,y + 200);
+    Tree1(x + 100,y + 300);
+    Tree1(x + 200,y + 300);
+};
+
+var House = function(x,y){
+   
+    pushMatrix();
+    stroke(0, 0, 0);
+    fill(166, 114, 51);
+    rect(x + 100,y + 100,200,200);
+    fill(43, 20, 6);
+    rect(x + 100,y + 83,200,96);
+    fill(48, 26, 9);
+    rect(x + 211,y + 200,20,100);
+    fill(87, 45, 13);
+    rect(x + 192,y + 200,20,100);
+    fill(130, 74, 31);
+    rect(x + 174,y + 200,20,100);
+    fill(116, 177, 252);
+    rect(x + 240,y + 200,50,50);
+    rect(x + 115,y + 200,50,50);
+    fill(219, 217, 255);
+     rect(x + 240,y + 200,50,26);
+    rect(x + 115,y + 200,50,27);
+    fill(99, 64, 8);
+    rect(x + 198,y + 170,9,25);
+    fill(255, 238, 0,60);
+     rect(x + 188,y + 152,30,30);
+     fill(219, 119, 37,100);
+     rect(x + 193,y + 160,20,20);
+    fill(255, 217, 0,120);
+     rect(x + 198,y + 165,10,10);
+     popMatrix();
+    noStroke();
+};
+
+var grass =  function(x,y){
+    
+     stroke(0, 0, 0);
+     fill(57, 255, 13);
+     rect(x + 32,y,5,49); 
+     rect(x + 19,y,-6,29);
+     rect(x + 22,y + 37,4,18); 
+     rect(x + 52,y + 30,-4,29);
+     rect(x + 56,y,5,36); 
+     rect(x + 49,y,-6,29);
+     rect(x + 22,y + 37,4,18); 
+     rect(x + 52,y + 30,-4,29);
+     rect(x + 71,y + -15,5,49); 
+     rect(x + 19,y,-6,29);
+     rect(x + 22,y + 37,4,18); 
+     rect(x + 52,y + 30,-4,29);
+     rect(x + 56,y,5,36); 
+     rect(x + 28,y + -19,-5,29);
+     rect(x + 66,y + 37,4,18); 
+     rect(x + 59,y + -32,-4,29);
+     rect(x + 75,y + 51,4,18); 
+     rect(x + 52,y + 30,-4,29);
+     rect(x + 80,y,5,36); 
+     rect(x + 49,y,-6,29);
+     rect(x + 39,y + 37,4,18); 
+     rect(x + 52,y + 30,-4,29);
+     rect(x + 4,y + -17,5,49); 
+     rect(x + 42,y,-6,29);
+     rect(x + 10,y + 44,4,18); 
+     rect(x + 52,y + 30,-4,29);
+     rect(x + 37,y + -44,7,36); 
+     rect(x + 28,y + -54,-5,29);
+     rect(x + 88,y + 37,4,18); 
+     rect(x + -3,y + -32,-4,29);
+     noStroke();
+};
+
+var skel = function(x,y){
+    
+    stroke(0, 0, 0);
+    fill(209, 209, 209);
+    rect(x + 214,y + 250,6,20);
+    rect(x + 200,y + 250,6,20);
+    rect(x + 200,y + 214,20,5);
+    rect(x + 200,y + 225,20,5);
+    rect(x + 200,y + 237,20,5);
+    rect(x + 190,y + 214,10,5);
+    rect(x + 220,y + 214,10,5);
+    rect(x + 207,y + 214,6,37);
+    rect(x + 183,y + 214,7,7);
+    rect(x + 230,y + 214,7,7);
+    rect(x + 184,y + 221,5,15);
+    rect(x + 231,y + 221,5,15);
+    ellipse(x + 210,y + 200,25,30);
+    fill(0, 0, 0);
+    rect(x + 201,y + 196,6,3);
+    rect(x + 212,y + 196,6,3);
+    fill(255, 0, 0);
+    rect(x + 203,y + 204,13,3);
+    noStroke(); 
+};
+
+var water = function(x,y){
+    
+    noStroke();
+    
+    var t =  function(x,y){
+       rect(x + 95,y + 100, 60 , 66);
+};
+    
+    fill(22, 22, 227);
+    t(x + 40,y + 16);
+    t(x + 50,y + 122);
+    t(x + 22,y + 79);
+    fill(4, 45, 227);
+    t(x + 101,y + 70);
+    t(x + 84,y + 24);
+    t(x + -19,y + 82);
+    fill(8, 69, 201);
+    t(x + -9,y + 33);
+    t(x + 60,y + -9);
+    t(x + 15,y + -24);
+    fill(0, 54, 230);
+    t(x + -54,y + 48);
+    t(x + -34,y + 2);
+    t(x + 94,y + 117);
+    t(x + -1,y + 114);
+    t(x + -49,y + 82);
+    fill(22, 35, 222);
+    t(x + 86,y + -36);
+    t(x + 60,y + -9);
+    t(x + 60,y + 65);
+    t(x + -4,y + -36);
+    t(x + 60,y + 152);
+    t(x + 132,y + 18);
+    
+};
+
+var Torch = function(x,y){
+    
+    pushMatrix();
+    
+    translate(x,y);
+    
+    fill(94, 34, 0);
+    
+    rect(100,100,5,40);
+    
+    fill(158, 158, 158);
+    
+    rect(100,100,5,12);
+    
+    noStroke();
+    
+    for(var i = 0; i < 89;++i){
+    
+    fill(255, 85, 0,i);
+    
+    ellipse(103,106,22 ,165 / i + 14);
+    
+    }
+    
+   
+    
+    popMatrix();
+    
+};
+
+var Stones = function(x,y){
+    
+    pushMatrix();
+    
+    translate(x,y);
+    
+    fill(163, 163, 163);
+    
+    rect(100,100,10,10);
+    
+    rect(119,112,10,10);
+    
+    rect(81,112,10,10);
+    
+    fill(110, 110, 110);
+    
+    rect(100,107,10,3);
+    
+    rect(119,118,10,3);
+    
+    rect(81,119,10,3);
+    
+    popMatrix();
+    
+};
+
+var soldier = function(x,y){
+    
+    pushMatrix();
+    
+    translate(x,y);
+    fill(0, 0, 0);
+    rect(214,250,6,20);
+    rect(200,250,6,20);
+    fill(117, 117, 117);
+    rect(200,200,20,50);
+    rect(195,214,5,25);
+    rect(220,214,5,25);
+    fill(255, 217, 161);
+    ellipse(210,200,25,30);
+    fill(255, 255, 255);
+    rect(201,196,6,3);
+    rect(212,196,6,3);
+    fill(0, 43, 255);
+    rect(204,196,3,3);
+    rect(212,196,3,3);
+    fill(0, 0, 0);
+    rect(203,204,13,1);
+    fill(255, 0, 0);
+    rect(211,217,30,50);
+    fill(145, 145, 145);
+    rect(216,222,20,40);
+    fill(79, 79, 79);
+    rect(219,187,6,18);
+    rect(194,187,6,18);
+    rect(194,174,31,18);
+    
+    popMatrix();
+    
+};
+
+// Rooms
+
+var World = function(){
+
+
+        fill(0, 255, 60);
+        rect(0,0,400,400); 
+        water(graphics_X + 287,graphics_Y + 438);
+        grass(graphics_X + 440,graphics_Y + 279);
+        grass(graphics_X + 440,graphics_Y + 457);
+        grass(graphics_X + 440,graphics_Y + 712);
+        grass(graphics_X + 595,graphics_Y + 734);
+        grass(graphics_X + 258,graphics_Y + 857);
+        grass(graphics_X + 414,graphics_Y + 887);
+        grass(graphics_X + 595,graphics_Y + 734);
+        grass(graphics_X + 725,graphics_Y + 887);
+        grass(graphics_X + 725,graphics_Y + 1091);
+        grass(graphics_X + 376,graphics_Y + 1091);
+        
+        Torch(graphics_X + 757,graphics_Y + 909);
+        Torch(graphics_X + 766,graphics_Y + 1040);
+        Torch(graphics_X + 885,graphics_Y + 991);
+        Torch(graphics_X + 800,graphics_Y + 100);
+        
+        Stones(graphics_X + 594,graphics_Y + 473);
+        Stones(graphics_X + 453,graphics_Y + 344);
+        Stones(graphics_X + 505,graphics_Y + 153);
+        Stones(graphics_X + 621,graphics_Y + 200);
+        Stones(graphics_X + 406,graphics_Y + 715);
+        Stones(graphics_X + 683,graphics_Y + 672);
+        Stones(graphics_X + 406,graphics_Y + 967);
+        player.draw();
+        Mini_Forest(graphics_X + -228,graphics_Y + 0);
+        Mini_Forest(graphics_X + -228,graphics_Y + -167);
+        Mini_Forest(graphics_X + -228,graphics_Y + 199);
+        Mini_Forest(graphics_X + -228,graphics_Y + 540);
+        Mini_Forest(graphics_X + -43,graphics_Y + -404);
+        Mini_Forest(graphics_X + 140,graphics_Y + -404);
+        Mini_Forest(graphics_X + 388,graphics_Y + -404);
+        Mini_Forest(graphics_X + 622,graphics_Y + -404);
+        Mini_Forest(graphics_X + 780,graphics_Y + -404);
+        Mini_Forest(graphics_X + 955,graphics_Y + -394);
+        Mini_Forest(graphics_X + 955,graphics_Y + 14);
+        Mini_Forest(graphics_X + 955,graphics_Y + 298);
+        Mini_Forest(graphics_X + 955,graphics_Y + 700);
+        Mini_Forest(graphics_X + 955,graphics_Y + 894);
+        Mini_Forest(graphics_X + 745,graphics_Y + 1062);
+        Mini_Forest(graphics_X + 553,graphics_Y + 1062);
+        Mini_Forest(graphics_X + 401,graphics_Y + 1062);
+        Mini_Forest(graphics_X + 207,graphics_Y + 1062);
+        Mini_Forest(graphics_X + 28,graphics_Y + 1062);
+        Mini_Forest(graphics_X + -158,graphics_Y + 948);
+        Mini_Forest(graphics_X + -173,graphics_Y + 1349);
+        Mini_Forest(graphics_X + -224,graphics_Y + 1729);
+        Mini_Forest(graphics_X + 1,graphics_Y + 1890);
+        Mini_Forest(graphics_X + 216,graphics_Y + 1890);
+        soldier(graphics_X + 683,graphics_Y + 400);
+        soldier(graphics_X + 683,graphics_Y + 81);
+        soldier(graphics_X + 940,graphics_Y + 605);
+        soldier(graphics_X + 836,graphics_Y + 865);
+        Tree1(graphics_X + 200,graphics_Y + 200);
+        Tree1(graphics_X + 430,graphics_Y + 200);
+        Tree1(graphics_X + 92,graphics_Y + 347);
+        Tree1(graphics_X + 200,graphics_Y + 494);
+        Tree1(graphics_X + 455,graphics_Y + 347);
+        Tree1(graphics_X + 371,graphics_Y + 494);
+        Tree1(graphics_X + 105,graphics_Y + 94);
+        Tree1(graphics_X + 601,graphics_Y + 200);
+        Tree1(graphics_X + 593,graphics_Y + 347);
+        Tree1(graphics_X + 561,graphics_Y + 494);
+        Tree1(graphics_X + 455,graphics_Y + 613);
+        Tree1(graphics_X + 387,graphics_Y + 745);
+        Tree1(graphics_X + 303,graphics_Y + 531);
+        Tree1(graphics_X + 476,graphics_Y + 800);
+        Tree1(graphics_X + 159,graphics_Y + 751);
+        fill(135, 135, 135);
+        rect(graphics_X + 843,graphics_Y + 206,36,850);
+        colBox("Wall",graphics_X + 843,graphics_Y + 206,30,850);
+        colBoxR(graphics_X + 844,graphics_Y + 206,36,850);
+        House(graphics_X + 862,graphics_Y + 200);
+        House(graphics_X + 825,graphics_Y + 700);
+        House(graphics_X + 825,graphics_Y + 445);
+        
+        
+        
+        if(Time >= 50){
+            
+        skel(graphics_X + 232,graphics_Y + 323);
+        skel(graphics_X + 479,graphics_Y + 629);
+        skel(graphics_X + 593,graphics_Y + 794);
+        skel(graphics_X + 400,graphics_Y + 897);
+        colBox("Combat",graphics_X + 773,graphics_Y + 970,70,100,"John");
+        colBox("Combat",graphics_X + 405,graphics_Y + 506,70,100,"Steve");
+        colBox("Combat",graphics_X + 654,graphics_Y + 800,70,100,"Dave");
+        colBox("Combat",graphics_X + 572,graphics_Y + 1069,70,100,"Fred");
+        
+        }
+        
+    drawChar();
+        
+    
+    if(dead[2] === true && Active_Quest === "Kill John"){
+        timer++;
+         player_exp = 150;
+        if(timer <= 100){
+        fill(79, 77, 77);
+        rect(100,100,200,200);
+        fill(255, 0, 0);
+        textSize(20);
+        text("Quest Completed",200,152);
+        text("Reward Level 6",200,180);
+        
+        
+    }
+    }
+    
+   
+    colBoxR(graphics_X,graphics_Y,200,1200);
+    colBox("Wall",graphics_X + 1200,graphics_Y,200,1200);
+    colBox("Wall",graphics_X ,graphics_Y + 1200,1200,200);
+    colBox("Wall",graphics_X,graphics_Y,1200,200);
+   
+    if(!collison){
+     if(keyIsPressed && keyCode === UP){
+          graphics_Y+=player_speed;
+          turnside = "back";
+          walking = true;
+    }
+    else{
+        walking = false;
+    }
+     if(keyIsPressed && keyCode === DOWN){
+        graphics_Y-=player_speed;
+        turnside = "front";
+        walking = true;
+    }
+     if(keyIsPressed && keyCode === RIGHT){
+        graphics_X-=player_speed;
+        turnside = "right";
+        walking = true;
+    }
+     if(keyIsPressed && keyCode === LEFT){
+        graphics_X+=player_speed;
+        turnside = "left";
+        walking = true;
+    }
+    
+    }
+       
+       colCount = 0;
+       Time+=0.05;
+       if(Time >= 200){
+           Time = 60;
+       }
+      fill(0,0,0,Time);
+      rect(0,0,400,400);
+       GUI();
+       LevelUp();
+       Update("Torches This Thing \n / Stones & The Spellsword");
+};
+
+var draw = function() {
+    
+    switch(page){
+    
+    case "Menu":
+        
+        Menu();
+        
+        break;
+    
+    case "Storyline":
+        
+        Storyline();
+        
+        
+        break;
+    
+    case "Setup_Intro":
+        
+        Setup_Intro();
+        
+    break;
+    
+    case "Gender_Choose":
+        
+       Gender_Choose();
+        
+    break;
+    
+    case "Setup":
+        
+       Class_Choose();
+        
+    break;
+        
+    case "Name_Choose":
+       
+       Name_Choose();
+       
+    break;
+         
+    case "Game":
+        
+        World();
+       
+        
+    break;
+       
+    case "House1":
+           
+       
+           graphics_X =-150;
+           graphics_Y = -57;
+           
+    break;
+           
+    case "Cape Point":
+             
+             background(0, 0, 0);
+             fill(24, 171, 85);
+             rect(graphics_X2 , graphics_Y2 ,1000,1000);
+             drawChar();
+             fill(140, 132, 132);
+             rect(graphics_X2 + 29,graphics_Y2 + 100,100,100);
+             rect(graphics_X2 + 274,graphics_Y2 + 191,100,100);
+             rect(graphics_X2 + 247,graphics_Y2 + 55,100,100);
+             
+             GUI();
+             drawChar();
+             player.draw();
+             if(!collison){
+     if(keyIsPressed && keyCode === UP){
+          graphics_Y2+=4;
+    }
+     if(keyIsPressed && keyCode === DOWN){
+        graphics_Y2-=4;
+    }
+     if(keyIsPressed && keyCode === RIGHT){
+        graphics_X2-=4;
+    }
+     if(keyIsPressed && keyCode === LEFT){
+        graphics_X2+=4;
+    }
+    }
+             colCount = 0;
+               
+    break;
+               
+    case "Lost Hope":
+                           
+                    background(0, 0, 0);
+                    fill(186, 17, 42);
+                    rect(graphics_X , graphics_Y ,1000,1000);
+                    drawChar();
+                    fill(140, 132, 132);
+                    rect(graphics_X3 + 29,graphics_Y3 + 100,100,100);
+                    rect(graphics_X3 + 274,graphics_Y3 + 191,100,100);
+                    rect(graphics_X3 + 247,graphics_Y3 + 55,100,100);
+                    GUI();
+                    drawChar();
+                    player.draw();
+                    
+                    colCount = 0;
+                   
+    break;
+       
+    case "Combat":
+   
+           if(Enemy === "John"){
+             combat("John",0,10,20,20,0);
+             }
+            if(Enemy === "Steve"){
+             combat("Steve",1,10,20,20,1);
+             }
+            if(Enemy === "Dave"){
+             combat("Dave",2,10,20,20,2);
+             }
+             if(Enemy === "Fred"){
+             combat("Fred",3,10,20,20,3);
+             }
+    
+    break;
+    
+    case "Talking":
+       
+        background(255, 255, 255);
+        test(stage);
+     
+    break;
+        
+    case "Map":
+           
+           mp();
+           
+    break;
+           
+    case "Coming Soon":
+           
+           background(255, 255, 255);
+           textSize(20);
+           text("Nothing Here Yet....",202,100);
+           Button("Page",139,209,134,96,"Menu","Menu",20);
+          
+    break;
+    
+    
+    }
+};
+
+
+  
+}
+        if (typeof draw !== 'undefined') processing.draw = draw;
+    });
+  </script>
+</body>
+</html>
