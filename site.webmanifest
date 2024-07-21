@@ -1,7 +1,7 @@
 {
     "name": "Will's Website",
     "short_name": "Website",
-    "description": "Wiliam Valentine's Resume Website",
+    "description": "William Valentine's Resume Website",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
