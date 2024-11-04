@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Coffee Project</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js"></script>
+</head>
+<body>
+   
+   
+  <canvas id="canvas"></canvas>
+  
+  
+  <script>
+    var canvas = document.getElementById("canvas");
+    var processing = new Processing(canvas, function(processing) {
+        processing.size(400, 400);
+        processing.background(0xFFF);
+
+        var mouseIsPressed = false;
+        processing.mousePressed = function () { mouseIsPressed = true; };
+        processing.mouseReleased = function () { mouseIsPressed = false; };
+
+        var keyIsPressed = false;
+        processing.keyPressed = function () { keyIsPressed = true; };
+        processing.keyReleased = function () { keyIsPressed = false; };
+
+        function getImage(s) {
+            var url = "https://www.kasandbox.org/programming-images/" + s + ".png";
+            processing.externals.sketch.imageCache.add(url);
+            return processing.loadImage(url);
+        }
+
+        // use degrees rather than radians in rotate function
+        var rotateFn = processing.rotate;
+        processing.rotate = function (angle) {
+            rotateFn(processing.radians(angle));
+        };
+
+        with (processing) {
+
+/**
+
+
+
+
+                            A Ziviro Creation
+                 
+                            Key Detecion By ScusX
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**/
+
+
+
+
+
+
+
+
+
+var Player = function(x,y){
+    
+    this.x = x;
+    this.y = y;
+    this.coins = 0;
+    
+}; 
+
+Player.prototype.draw = function(min,max) {
+    
+    this.y = constrain(this.y,min,max);
+    
+    if(!this.isJumping){
+       fill(255);
+       rect(this.x,this.y,30,30);
+       
+       fill(0, 0, 0);
+       rect(this.x + 7,this.y + 6,7,14);
+       rect(this.x + 19,this.y + 6,7,14);
+       
+       
+       fill(255, 255, 255);
+       rect(this.x + 7,this.y + 6,3,7);
+       rect(this.x + 19,this.y + 6,3,7);
+}
+
+    if(this.isJumping){
+      fill(255);
+      rect(this.x,this.y,30,15);
+      
+      fill(0, 0, 0);
+      rect(this.x + 7,this.y + 6,7,7);
+      rect(this.x + 19,this.y + 6,7,7);
+      
+} 
+
+};  
+
+Player.prototype.jump = function(){
+    
+    this.y -= 3;
+    this.isJumping = true;
+    
+};
+
+Player.prototype.fall = function(){
+   
+    this.y += 4;
+    this.isJumping = false;
+    
+};
+
+ var player = new Player(21,0),
+
+     player2 = new Player(21,0);
+
+ noStroke();
+
+ var page = "Logo";
+
+ var timer =0;
+
+ var x = 0;
+ 
+ var lX = 0;
+ 
+ var ZX = 0;
+
+
+var Coin =function(x,y){
+    this.x = x;
+    this.y = y;
+    
+};
+
+ {
+
+ var grassXs = [];
+
+ var treeXs = [];
+
+ var coins = [];
+
+ var players = 0;
+ 
+ }
+
+  for (var v =0; v < 250; v++){
+    coins.push(new Coin( v * 40 + 300,random(20,143)));
+    
+    
+        
+         coins.push(new Coin( v * 40 + 300,random(220,340)));
+    
+    
+}
+
+  for (var i = 0; i < 25; i++){
+    grassXs.push  (i *20);
+}
+
+  for (var i =0; i < 25; i++){
+    treeXs.push  (i *130);
+}
+
+Coin.prototype.draw = function(){
+    fill(255, 255, 255);
+    rect(this.x,this.y,10,10);
+Player.prototype.checkForCoin =function(Coin){
+if(Coin.x >= this.x && Coin.x <= this.x + 10 && Coin.y >= this.y - 3 && Coin.y <= this.y + 40 ){
+        Coin.y = -400;
+        this.coins++;
+    }
+};
+
+
+};
+
+var Button = function(x,y,w,h,pageSwitch,txt,txtSize){
+         fill(64, 51, 7);
+    if(mouseX > x&& mouseX < x + w && mouseY > y && mouseY < y + h){
+        x = x - 18;
+        w = w - 40;
+        
+        if(mouseIsPressed){
+            page = pageSwitch;
+        }
+      
+      
+    }
+      rect(x,y,w,h);
+          
+      textAlign(CENTER,CENTER);
+      textSize(txtSize);
+      fill(0, 0, 0);
+      text(txt,x +w / 2,y + h / 2);
+      
+};
+
+var button = function(x,y,w,h,pageSwitch,txt,txtSize){
+        
+         fill(255, 255, 255);
+    if(mouseX > x&& mouseX < x + w && mouseY > y && mouseY < y + h){
+        fill(201, 201, 201);
+        if(mouseIsPressed){
+            page = pageSwitch;
+        }
+      
+      
+
+    }
+    rect(x,y,w,h);
+          
+      textAlign(CENTER,CENTER);
+      textSize(txtSize);
+      fill(0, 0, 0);
+      text(txt,x +w / 2,y + h / 2);
+      
+};
+
+// Key Detection - ScusX
+
+    var keyString = "";
+
+    var keySplit = [];
+
+keyPressed = function() {
+    if(!keyString.includes(key.toString().toLowerCase())) {
+        keyString = keyString.concat(key.toString().toLowerCase());
+    }
+};
+
+keyReleased = function() {
+    keyString = keyString.replace(key.toString().toLowerCase(), "");
+};
+
+var checkPressed = function(Key) {
+    keySplit = keyString.split("");
+    if(keySplit.indexOf(Key.toString().toLowerCase()) !== -1) {
+        return(true);
+    }
+    else {
+        return(false);
+    }
+};
+
+var Tree = function(x,y){
+    
+    var tri = function(x,y){
+    
+  
+     beginShape();
+     vertex(x + 200,y +113);
+     vertex(x + 150,y +250);
+     vertex(x + 250,y +250);
+     endShape();
+    
+    
+};
+    
+   fill(135, 53, 5);
+   rect(x + 192,y + 268,23,81);
+   fill(18, 110, 41);
+   tri(x + 4,y + 49);
+   tri(x + 4,y + -16);
+   tri(x + 4,y + 21);
+
+};
+
+var lX = 0;
+
+var draw = function() {
+    
+   switch(page){
+    
+    case "Logo":
+        
+         background(0, 0, 0);
+        
+        pushMatrix();
+        
+        fill(255, 255, 255);
+        
+        if(frameCount <= 106){
+            lX += 0.01;
+            scale(lX);
+        }
+        
+        if(frameCount <= 106){
+            
+            ZX--;
+        }
+        
+       
+        
+        textSize(250);
+        
+        text("Z ",80,279);
+         
+        
+    
+        
+        
+        fill(0, 0, 0);
+        
+        translate(91,211);
+        
+
+        
+        popMatrix();
+        
+         if(frameCount >= 106){
+            
+            fill(255, 255, 255);
+            
+            textSize(60);
+            
+            text("ivrio",237,279);
+            
+        }
+        
+        
+   
+        
+        if(frameCount === 140){
+            
+            page = "Menu";
+            
+        }
+        
+        popMatrix();
+        
+        break;
+        
+        
+    case "Menu":
+        
+        {
+        
+       noStroke();
+       background(161, 161, 161);
+       Tree(-111,3);
+       Tree(151,3);
+       
+        for(var i = 0;i < 5;i++){
+             
+            fill(184, 106, 27);
+            rect(77, i * 26 + 184,314,49,30);
+            fill(112, 61, 10);
+            rect(77, i * 26 + 206,314,22,30);
+           
+        }
+        
+        fill(255, 208, 115);
+        rect(300,235,55,98);
+        fill(232, 33, 33);
+        rect(300,303,55,30);
+        fill(130, 94, 55);
+        rect(314,271,20,20);
+        fill(209, 138, 57);
+        rect(314,283,5,20);
+        rect(329,283,5,20);
+        fill(14, 130, 30);
+        rect(77,176,314,30,10);
+        fill(255, 255, 255);
+        rect(0,336,400,100);
+        
+        fill(135, 78, 12);
+        rect(348,143,20,50);
+        fill(97, 56, 10);
+        rect(348,144,10,49);
+    
+    for(var i = 0;i < 4;i++){
+            fill(201, 114, 14);
+            rect(85,i * 29 + 209,40,20,20);
+            fill(148, 84, 12);
+            rect(91,i * 29 + 214,25,10,20);
+            fill(117, 65, 9);
+            rect(96,i * 29 + 216,15,5,20);
+           
+        }
+        
+       button(44,345,100,40,"Help","H e l p",20);
+       button(279,345,100,40,"Setup","S t a r t",20);
+       fill(13, 13, 13);
+       rect(237,249,10,28);
+       fill(255, 136, 0);
+       rect(237,226,10,28);
+       Tree(-183,3);
+       Tree(-43,3);
+       fill(194, 194, 194,100);
+       rect(234,223,18,41);
+       fill(0,0,0,50);
+       rect(0,0,400,400);
+       fill(176, 115, 79,255);
+       textSize(30);
+       fill(0);
+       text("D R E A M L A N D",205,42);  
+       fill(255, 196, 0,80);
+       ellipse(241,231,50,50);
+       fill(255, 196, 0,90);
+       ellipse(241,231,40,40);
+       fill(255, 196, 0,100);
+       ellipse(241,231,30,30);
+       Button(300,235,58,100,"Shop");
+       
+        }
+       
+        break;
+    
+    
+    
+    case "Help":
+        
+        {
+        
+    background(255, 255, 255);
+    Tree(99,-101);
+    Tree(167,-162);
+    Tree(-142,-128);
+    Tree(-36,-57);
+    Tree(153,49);
+    Tree(39,49);
+    Tree(-167,49);
+    Tree(-67,49);
+    button(171,355,50,40,"Menu","M e n u",20);
+    fill(0,0,0,70);
+    rect(0,0,400,400);
+    textSize(196);
+    fill(255, 0, 0);
+    text("?",200,163);
+    fill(255, 255, 255);
+    text("?",197,163);
+    fill(255, 0, 0);
+    text("?",193,163);
+    fill(255, 255, 255);
+    text("?",189,163);
+    textSize(20);
+    fill(255, 217, 0);
+    text("How To Play",200,293);
+    textSize(13);
+    
+    
+    fill(255, 255, 255);
+    text("Click to jump on solo, \n A & K to jump on split screen, collect coins to win .",193,319);
+    text("The objective of the game is to collect the coins. ",197,344);
+    text("To collect a coin get very close it.",200,360);
+    
+        
+        }
+        
+        break;
+        
+        
+        
+    case "Setup":
+        
+        {
+        
+        background(0, 0, 0);
+        Tree(78,-74);
+        Tree(-70,-74);
+        button(50,100,120,100,"1player","S O L O",10);
+        button(250,100,120,100,"2player"," S P L I T  S C R E E N",10);
+        Tree(130,51);
+        Tree(0,51);
+        Tree(-130,51);
+        
+        }
+        
+        break;
+        
+        
+        
+    case "Shop":
+        
+        {
+            
+        background(255, 166, 0);
+        fill(201, 4, 4);
+        rect(95,102,218,305);
+        fill(18, 6, 6);
+        rect(131,350,151,80);
+        fill(97, 66, 10);
+        rect(37,220,21,156);
+        fill(16, 120, 17);
+        rect(20,187,55,152);
+        fill(99, 99, 99);
+        rect(24,374,50,50);
+        fill(176, 96, 30);
+        rect(322,225,70,109);
+        fill(130, 87, 7);
+        rect(322,345,21,65);
+        rect(371,345,21,66);
+        fill(140, 88, 21);
+        rect(322,310,70,44);
+        fill(138, 87, 21);
+        rect(122,21,154,76);
+        fill(255, 215, 122);
+        rect(126,28,146,59);
+        pushMatrix();
+        scale(0.2);
+        Tree(494,49);
+        Tree(781,49);
+        Tree(1078,49);
+        popMatrix();
+        fill(163, 163, 163);
+        rect(331,242,50,50);
+        fill(145, 145, 145);
+        rect(331,292,50,10);
+        fill(150, 104, 30);
+        rect(346,224,20,50);
+        fill(227, 220, 16);
+        rect(346,210,20,20);
+        fill(255,255,255,200);
+        rect(331,186,50,50);
+        rect(350,186,10,50);
+        rect(364,186,10,50);
+        rect(337,186,10,50);
+        text("Hello...",201,150);
+        button(179,356,50,50,"Setup","Exit",20);
+        
+        }
+        
+        break;
+        
+        
+        
+    case "Paused1":
+        
+        {
+        
+        background(125, 125, 125);
+        Tree(114,17);
+        Tree(-1,17);
+        Tree(-111,17);
+        fill(255, 255, 255);
+        rect(0,height * 0.90,width,height* 0.10);
+        button(154,243,100,40,"1player","Resume",20);
+        textSize(30);
+        fill(255, 255, 255);
+        text("Paused",200,150);
+        fill(255, 0, 0);
+        text("Paused",198,150);
+        fill(255, 255, 255);
+        text("Paused",196,150);
+        fill(255,255,255,100);
+        rect(0,0,400,400);
+        
+        }
+        
+        break;
+        
+        
+        
+    case "Paused2":
+        
+        {
+        
+        background(125, 125, 125);
+        Tree(114,17);
+        Tree(-1,17);
+        Tree(-111,17);
+        fill(255, 255, 255);
+        rect(0,height * 0.90,width,height* 0.10);
+        button(154,243,100,40,"2player","Resume",20);
+        textSize(30);
+        fill(255, 255, 255);
+        text("Paused",200,150);
+        fill(255, 0, 0);
+        text("Paused",198,150);
+        fill(255, 255, 255);
+        text("Paused",196,150);
+        fill(255,255,255,100);
+        rect(0,0,400,400);
+        
+        }
+        
+        break;
+        
+        
+        
+    case "1player":
+        
+        {
+  
+    players = 1;  
+  
+    background(125, 125, 125);
+    Tree(114,17);
+    Tree(-1,17);
+    Tree(-111,17);
+    fill(255, 255, 255);
+    rect(0,height * 0.90,width,height* 0.10);
+ 
+    for (var i =0; i < grassXs.length; i++){
+    fill(98, 255, 0);
+    fill(39, 161, 100);
+    rect(grassXs[i],height*0.82,4,27);
+    fill(14, 99, 5);
+    rect(grassXs[i],height*0.85,20,20);
+    fill(35, 184, 60);
+    rect(grassXs[i] + 31,height*0.83,14,12);
+    Tree(treeXs[i],302);
+    grassXs[i] -=1;
+    treeXs[i] -=1;
+if(grassXs[i] <= -51){
+    grassXs[i] = width;
+    
+}
+if(treeXs[i] <= -31){
+    
+    treeXs[i] = width;
+}
+}
+
+    for(var i = 0; i < coins.length; i++){
+    coins[i].draw();
+    player.checkForCoin(coins[i]);
+    coins[i].x  -=1;
+    coins[i].y +=0.1;
+    
+}
+
+    button(159,362,100,40,"Shop","Shop",20);
+    button(-2,360,40,40,"Paused1","II",30);
+    textSize(20);
+    fill(255, 0, 0);
+    text("Coins: " + player.coins,294,31);
+    fill(255, 255, 255);
+    text("Coins: " + player.coins,291,31);
+    fill(255, 0, 0);
+    text("Coins: " + player.coins,289,31);
+
+    if(mouseIsPressed){player.jump();
+     
+     } 
+    else{ player.fall();
+     
+     }
+ 
+    player.draw(0,310); 
+     
+    fill(255,255,255,100);
+    rect(0,0,400,400);
+     
+    }
+     
+        break;
+
+    
+
+
+     case "2player":
+     
+        {
+            
+    players = 2;
+  
+    background(125, 125, 125);
+    Tree(114,25);
+    Tree(-1,25);
+    Tree(-111,25);
+    fill(255, 255, 255);
+    rect(0,389,width,height * 0.03);
+    rect(0,188,width,height* 0.10);
+    fill(125,125,125);
+    rect(0,0,400,200);
+    Tree(114,-150);
+    Tree(-1,-150);
+    Tree(-111,-150);
+    
+    
+ 
+    for (var i =0; i < grassXs.length; i++){
+    fill(98, 255, 0);
+    fill(39, 161, 100);
+    rect(grassXs[i],height*0.90,4,27);
+    fill(14, 99, 5);
+    rect(grassXs[i],height*0.93,20,20);
+    fill(35, 184, 60);
+    rect(grassXs[i] + 31,height*0.91,14,12);
+    fill(39, 161, 100);
+    rect(grassXs[i],184,4,27);
+    fill(14, 99, 5);
+    rect(grassXs[i],195,20,20);
+    fill(35, 184, 60);
+    rect(grassXs[i] + 31,190,14,12);
+    grassXs[i] -=1;
+    treeXs[i] -=1;
+if(grassXs[i] <= -51){
+    grassXs[i] = width;
+    
+}
+
+}
+
+    for(var i = 0; i < coins.length; i++){
+    coins[i].draw();
+    player.checkForCoin(coins[i]);
+    player2.checkForCoin(coins[i]);
+    coins[i].x  -=1;
+    coins[i].y += 0.01;
+    
+    
+}
+
+     button(300,0,100,40,"Shop","Shop",20);
+     button(269,0,40,40,"Paused2","II",30);
+     textSize(20);
+     fill(255, 0, 0);
+     text("Coins: " + player.coins,216,31);
+     fill(255, 255, 255);
+     text("Coins: " + player.coins,218,31);
+     fill(255, 0, 0);
+     text("Coins: " + player.coins,220,31);
+     
+     fill(255, 0, 0);
+     text("Coins: " + player2.coins,216,250);
+     fill(255, 255, 255);
+     text("Coins: " + player2.coins,218,250);
+     fill(255, 0, 0);
+     text("Coins: " + player2.coins,220,250);
+
+     if(checkPressed("a")){player.jump();} 
+     else{ player.fall();}
+     
+     if(checkPressed("k")){player2.jump();} 
+     else{ player2.fall();}
+     
+     
+ 
+     player.draw(0,165); 
+     player2.draw(228,343);
+     fill(255,255,255,100);
+     rect(0,0,400,400);
+     
+     }
+        
+        break;
+     
+        
+}
+    
+
+    
+};
+
+
+
+
+
+}
+        if (typeof draw !== 'undefined') processing.draw = draw;
+    });
+  </script>
+</body>
+</html>

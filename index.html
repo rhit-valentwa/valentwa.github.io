@@ -1,37 +1,208 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>William Valentine's Personal Website</title>
-    <link rel="stylesheet" href="styles/normalize.css" />
-    <link rel="stylesheet" href="styles/main.css" />
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>William Valentine</title>
+
+    <meta name="author" content="William Valentine">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    
   </head>
-  <body id="about">
-    <header>
-      <h1>Will Valentine</h1>
-    </header>
-    <nav>
-      <ul>
-        <li><a href="/">About</a></li>
-        <li><a href="/research">Publications</a></li>
-        <li><a href="cv.pdf">CV</a></li>
-      </ul>
-    </nav>
-    <main>
-      <h1>Hi, I'm Will.</h1>
-      <img src="images/profile.png" alt="Will Valentine's Profile Picture" style="width:300px;height:auto;float:right;margin-left:20px;">
-     
-      <p>I'm a student at Rose-Hulman Institute of Technology studying Computer Science and Mathematics.</p>
-      <p>My research interest is computer vision. Within computer vision, I have done work on emotion perception, visual context understanding, and LiDAR point cloud alignment for autonomous vehicles.</p>
-    </main>
-    <footer>
-      You can email me at valentwa (at) rose-hulman.edu
-    </footer>
-    <script src="scripts/main.js"></script>
+
+  <body>
+    <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+      <tr style="padding:0px">
+        <td style="padding:0px">
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr style="padding:0px">
+              <td style="padding:2.5%;width:63%;vertical-align:middle">
+                <p class="name" style="text-align: center;">
+                  William Valentine
+                </p>
+                <br>
+                I'm an undergraduate student in my sophomore year at Rose-Hulman Institute of Technology studying Computer Science and Mathematics.</p>
+      <p>My research explores the intersection of human-robot interaction and computer vision, with a focus on developing frameworks that use a visual understanding a situtation to aid computer systems. Some papers are <span class="highlight">highlighted</span>.
+                
+        <p style="text-align:center">
+          <a href="mailto:valentwa@rose-hulman.edu">Email</a> &nbsp;/&nbsp;
+          <a href="data/cv.pdf">CV</a> &nbsp;/&nbsp;
+          <a href="data/WilliamValentine-bio.txt">Bio</a> &nbsp;/&nbsp;
+          <a href="https://scholar.google.com/citations?user=847iQhcAAAAJ&hl=en">Scholar</a> &nbsp;/&nbsp;
+          <a href="https://github.com/rhit-valentwa?tab=repositories">Github</a>
+        </p>
+              <td style="padding:2.5%;width:40%;max-width:40%">
+                <a href="data/images/profile.png"><img style="width:100%;max-width:100%;object-fit: cover; border-radius: 50%;" alt="profile photo" src="data/images/profile.png" class="hoverZoomLink"></a>
+              </td>
+            </tr>
+          </tbody></table>
+         
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+              <tr>
+              <td style="padding:20px;width:100%;vertical-align:middle">
+                <h2>Research</h2>
+                <p>
+                  <p>
+                    My research projects explore computer vision and real-time perception systems. From creating explainable models for emotion recognitioncand refining pose alignment techniques for cooperative vehicle perception to leveraging computational tools to address neurological disease markers. My work emphasizes explainability, precision, and practical applications in real-world environments.
+                  </p>
+                  </p>
+              </td>
+            </tr>
+          </tbody></table>
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+
+
+    <tr onmouseout="ever_stop()" onmouseover="ever_start()">
+      <td style="padding:20px;width:25%;vertical-align:middle">
+        <div>
+					  <img src='data/images/research/emotion.png' width=100%>
+        </div>
+        <script type="text/javascript">
+          function ever_start() {
+            document.getElementById('ever_image').style.opacity = "1";
+          }
+
+          function ever_stop() {
+            document.getElementById('ever_image').style.opacity = "0";
+          }
+          ever_stop()
+        </script>
+      </td>
+      <td style="padding:20px;width:75%;vertical-align:middle" bgcolor="#ffffd0">
+        <a href="data/papers/hcc.pdf">
+			<span class="papertitle">HCC: An
+        explainable framework for classifying discomfort from video 
+</span>
+        </a>
+        <br>
+				<strong>William Valentine</strong>,
+				Megan Webb,
+				Christopher Collum,
+        <a href="https://www.cse.unr.edu/~dave/">Dave Feil-Seifer</a>,
+        <a href="https://www.unr.edu/cse/people/emily-hand">Emily Hand</a>,
+				<br>
+        <em>ISVC</em>, 2024 <font color="red"><strong>(Oral Presentation)</strong></font>
+        <br>
+        <a href="data/papers/hcc.pdf">ISVC</a>
+        <p></p>
+        <p>
+          
+          The Human Comfort Classifier (HCC) detects discomfort in real time from video, combining pose estimation, facial landmarks, and sentiment analysis in a transparent, rule-based model. This approach is beneficial for social skills training and achieves 78% accuracy without relying on deep learning, ensuring explainable feedback for users.        </p>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="padding:20px;width:25%;vertical-align:middle">
+        <div>
+          <img src='data/images/research/alignment.png' width=100%>
+        </div>
+      </td>
+      <td style="padding:20px;width:75%;vertical-align:middle">
+        <a href="data/papers/bb-align.pdf">
+			<span class="papertitle">BB-Align: A Lightweight Pose Recovery Framework for Vehicle-to-Vehicle Cooperative Perception
+</span>
+        </a>
+        <br>
+				<a href="https://lixingsong.github.io/">Lixing Song</a>,
+        <strong>William Valentine</strong>, 
+        <a href="https://facultyinfo.unt.edu/faculty-profile?profile=qy0022">Qing Yang</a>,
+        <a href="https://www.honggangwang.org/">Honggang Wang</a>, 
+				<a href="https://www.umassd.edu/directory/hfang2/">Hua Fang</a>, 
+        <a href="https://chrisye-liu.github.io/">Ye Liu</a>
+
+        <br>
+        <em>ICDCS</em>, 2024 &nbsp <font color="red"><strong>(Oral Presentation)</strong></font>
+        <br>
+        <a href="data/papers/bb-align.pdf">ICDCS</a> / <a href="data/presentations/BB-Align.pdf">presentation</a>
+        <p></p>
+        <p>
+          
+          BB-Align is a two-stage framework that improves pose accuracy in vehicle-to-vehicle (V2V) perception by using Lidar Bird’s-eye View (BV) images and bounding boxes. It aligns data from different cars, correcting pose errors without requiring extra training, making it suitable for real-world V2V applications. Tests show BB-Align enhances pose accuracy, achieving errors under 1m and 1°, and improves object detection in error-prone scenarios.        </p>
+      </td>
+    </tr>
+
+    
+    <tr>
+      <td style="padding:20px;width:25%;vertical-align:middle">
+        <div class="one">
+					  <img src='data/images/research/biochemistry.png' width=100%>
+        </div>
+      </td>
+      <td style="padding:20px;width:75%;vertical-align:middle">
+        <a href="data/presentations/Alzheimer’s Research Presentation.pdf">
+			<span class="papertitle">Modeling and screening aggregation inhibition of amyloid-beta peptides by small molecules as potential drug candidates
+</span>
+        </a>
+        <br>
+        (alphabetical)
+        Kara Dawson,
+        Paul Martino,
+        Emma Ryan,
+        <strong>William Valentine,</strong>
+        Abigail Wheeler
+				<br>
+        <em>Houghton University SRI</em>, 2023
+        <br>
+        <a href="data/presentations/Alzheimer’s Research Presentation.pdf">presentation</a>
+        <p></p>
+        <p>
+          This research focused on using AutoDock Vina to model protein-ligand binding for kinase inhibitors like Regorafenib, targeting Alzheimer’s pathology by inhibiting tau hyperphosphorylation and amyloid-beta aggregation. This approach aims to identify effective compounds that can slow disease progression.
+        </p>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="padding:20px;width:25%;vertical-align:middle">
+        <div class="one">
+					  <img src='data/images/research/intersection.png' width=100%>
+        </div>
+        <script type="text/javascript">
+          function ever_start() {
+            document.getElementById('ever_image').style.opacity = "1";
+          }
+
+          function ever_stop() {
+            document.getElementById('ever_image').style.opacity = "0";
+          }
+          ever_stop()
+        </script>
+      </td>
+      <td style="padding:20px;width:75%;vertical-align:middle">
+        <a href="data/presentations/Intersection Traffic Automation for Vehicles.pdf">
+			<span class="papertitle">Intersection Traffic Automation for Vehicles
+</span>
+        </a>
+        <br>
+				<strong>William Valentine</strong>,
+				Avery Belanger,
+				Jie Zhao
+				<br>
+        <em>Houghton University SRI</em>, 2023
+        <br>
+        <a href="data/presentations/Intersection Traffic Automation for Vehicles.pdf">presentation</a>
+        <p></p>
+        <p>
+          
+        The project tests a centralized control system using computer vision to manage vehicle and pedestrian flow at intersections. By employing YOLOv8 for real-time detection, it automates queuing to reduce wait times and improve safety.
+        </p>
+      </td>
+    </tr>
+
+          </tbody></table>
+          <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr>
+              <td style="padding:0px">
+                <br>
+                <p style="text-align:center;font-size:small;">
+                  This website format is fantastic, kudos to <a href="https://github.com/jonbarron/jonbarron_website">Jon Barron</a>.
+                </p>
+              </td>
+            </tr>
+          </tbody></table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
