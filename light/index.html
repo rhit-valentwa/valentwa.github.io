@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>light</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    body.on { background: #fff; }
+  </style>
+</head>
+<body>
+  <script>
+    // Blink the background white (on) / black (off) in Morse code,
+    // cycling through the binary numbers 000 .. 111 on repeat.
+
+    // Morse for the two digits we need.
+    var MORSE = { '0': '-----', '1': '.----' };
+
+    // Timing in milliseconds. One "unit" is the base length.
+    // Kept slow on purpose: a dot flash + gap is ~1.4s (~0.7 Hz), far below
+    // the ~3-30 Hz band that can trigger photosensitive seizures, and slow
+    // enough to read clearly at long range.
+    var UNIT = 700;
+    var DOT  = 1 * UNIT;   // short flash
+    var DASH = 3 * UNIT;   // long flash
+    var GAP_SYMBOL = 1 * UNIT; // gap between dots/dashes in a character
+    var GAP_LETTER = 3 * UNIT; // gap between characters (digits)
+    var GAP_WORD   = 7 * UNIT; // gap between numbers
+
+    // Push the Morse for one 3-bit string (e.g. "101") onto the timeline.
+    function pushNumber(steps, bits) {
+      for (var d = 0; d < bits.length; d++) {
+        var code = MORSE[bits[d]];
+        for (var s = 0; s < code.length; s++) {
+          steps.push({ on: true, ms: code[s] === '.' ? DOT : DASH });
+          // gap after every symbol except the last in this character
+          if (s < code.length - 1) steps.push({ on: false, ms: GAP_SYMBOL });
+        }
+        // gap after every digit except the last in this number
+        if (d < bits.length - 1) steps.push({ on: false, ms: GAP_LETTER });
+      }
+    }
+
+    // Build a flat timeline of {on:bool, ms:number} steps.
+    // 000 is the separator; the real numbers are 001 .. 111 (1 .. 7).
+    // Layout:  000  001  000  010  000 ... 000  111  000  (loops)
+    function buildTimeline() {
+      var steps = [];
+      for (var n = 1; n <= 7; n++) {
+        pushNumber(steps, '000');                 // separator
+        steps.push({ on: false, ms: GAP_WORD });
+        pushNumber(steps, n.toString(2).padStart(3, '0')); // the number
+        steps.push({ on: false, ms: GAP_WORD });
+      }
+      return steps;
+    }
+
+    var timeline = buildTimeline();
+    var i = 0;
+
+    function tick() {
+      var step = timeline[i];
+      document.body.classList.toggle('on', step.on);
+      i = (i + 1) % timeline.length; // repeat forever
+      setTimeout(tick, step.ms);
+    }
+
+    tick();
+  </script>
+</body>
+</html>
