@@ -25,10 +25,10 @@
     var MORSE = { '0': '-----', '1': '.----' };
 
     // Timing in milliseconds. One "unit" is the base length.
-    // Kept slow on purpose: a dot flash + gap is ~1.4s (~0.7 Hz), far below
+    // Kept slow on purpose: a dot flash + gap is ~0.66s (~1.5 Hz), still below
     // the ~3-30 Hz band that can trigger photosensitive seizures, and slow
     // enough to read clearly at long range.
-    var UNIT = 700;
+    var UNIT = 330;
     var DOT  = 1 * UNIT;   // short flash
     var DASH = 3 * UNIT;   // long flash
     var GAP_SYMBOL = 1 * UNIT; // gap between dots/dashes in a character
